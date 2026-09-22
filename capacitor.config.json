@@ -1,0 +1,9 @@
+{
+  "appId": "com.lletmonk.skystack",
+  "appName": "Sky Stack",
+  "webDir": "www",
+  "android": {
+    "backgroundColor": "#1a1440",
+    "allowMixedContent": false
+  }
+}
