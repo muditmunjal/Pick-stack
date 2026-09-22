@@ -9,7 +9,8 @@ workflows:
   generate-keystore:
     name: 1 - Generate signing keystore (run once)
     max_build_duration: 15
-    instance_type: linux
+    instance_type: mac_mini_m2
+    
     scripts:
       - name: Create keystore
         script: |
@@ -38,7 +39,7 @@ workflows:
   android-release:
     name: 2 - Build Sky Stack AAB for Play Store
     max_build_duration: 30
-    instance_type: linux
+    instance_type: mac_mini_m2
     environment:
       groups:
         - signing
