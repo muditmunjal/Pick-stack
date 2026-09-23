@@ -1,16 +1,8 @@
 workflows:
-  # ============================================================
-  # WORKFLOW 1 - run this ONCE first. It creates your signing
-  # key (keystore) and gives it to you as a downloadable file.
-  # Download keystore.jks + keystore-info.txt, then upload the
-  # keystore in Codemagic > Teams > Code signing identities
-  # (or keep them safe - you need this SAME file forever).
-  # ============================================================
   generate-keystore:
     name: 1 - Generate signing keystore (run once)
     max_build_duration: 15
     instance_type: mac_mini_m2
-    
     scripts:
       - name: Create keystore
         script: |
@@ -23,26 +15,17 @@ workflows:
             -dname "CN=LLETMONK, OU=Games, O=LLETMONK, L=Dubai, C=AE"
           echo "Keystore password: $STOREPASS" > keystore-info.txt
           echo "Key alias: skystack" >> keystore-info.txt
-          echo "SAVE BOTH FILES SOMEWHERE SAFE (Google Drive)." >> keystore-info.txt
     artifacts:
       - keystore.jks
       - keystore-info.txt
 
-  # ============================================================
-  # WORKFLOW 2 - the app build. Before running it, add these
-  # environment variables in Codemagic (group name: signing):
-  #   CM_KEYSTORE        = upload/paste your keystore.jks (as file)
-  #   CM_KEYSTORE_PASSWORD = password from keystore-info.txt
-  #   CM_KEY_ALIAS       = skystack
-  # Then run - it outputs app-release.aab for Play Console.
-  # ============================================================
   android-release:
-    name: 2 - Build Sky Stack AAB for Play Store
+    name: 2 - Build Pick Stack AAB for Play Store
     max_build_duration: 30
     instance_type: mac_mini_m2
     environment:
-      groups:
-        - signing
+      android_signing:
+        - keystore_reference
       java: 17
       node: 20
     scripts:
@@ -56,19 +39,13 @@ workflows:
         script: |
           npx cap add android
           npx cap sync android
-      - name: Set version
-        script: |
-          cd android
-          # versionCode auto-increments per build
-          sed -i "s/versionCode 1/versionCode $BUILD_NUMBER/" app/build.gradle || true
       - name: Build signed release bundle
         script: |
-          echo $CM_KEYSTORE | base64 --decode > /tmp/keystore.jks 2>/dev/null || cp "$CM_KEYSTORE_PATH" /tmp/keystore.jks
           cd android
           ./gradlew bundleRelease \
-            -Pandroid.injected.signing.store.file=/tmp/keystore.jks \
+            -Pandroid.injected.signing.store.file=$CM_KEYSTORE_PATH \
             -Pandroid.injected.signing.store.password=$CM_KEYSTORE_PASSWORD \
             -Pandroid.injected.signing.key.alias=$CM_KEY_ALIAS \
-            -Pandroid.injected.signing.key.password=$CM_KEYSTORE_PASSWORD
+            -Pandroid.injected.signing.key.password=$CM_KEY_PASSWORD
     artifacts:
       - android/app/build/outputs/bundle/release/app-release.aab
