@@ -1,6 +1,6 @@
 {
-  "appId": "com.lletmonk.skystack",
-  "appName": "Sky Stack",
+  "appId": "com.lletmonk.pickstack",
+  "appName": "Pick Stack",
   "webDir": "www",
   "android": {
     "backgroundColor": "#1a1440",
