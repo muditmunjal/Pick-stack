@@ -39,6 +39,12 @@ workflows:
         script: |
           npx cap add android
           npx cap sync android
+      - name: Set version code
+        script: |
+          cd android
+          sed -i.bak "s/versionCode 1/versionCode $BUILD_NUMBER/" app/build.gradle
+          sed -i.bak "s/versionName \"1.0\"/versionName \"1.0.$BUILD_NUMBER\"/" app/build.gradle
+          grep -E "versionCode|versionName" app/build.gradle
       - name: Build signed release bundle
         script: |
           cd android
