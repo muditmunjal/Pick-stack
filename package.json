@@ -1,14 +1,14 @@
 {
-  "name": "sky-stack",
+  "name": "pick-stack",
   "version": "1.0.0",
-  "description": "Sky Stack - one-tap arcade tower stacking game by LLETMONK",
+  "description": "Pick Stack - one-tap arcade tower stacking game by LLETMONK",
   "private": true,
   "dependencies": {
-    "@capacitor/android": "^6.1.0",
-    "@capacitor/core": "^6.1.0"
+    "@capacitor/android": "^8.0.0",
+    "@capacitor/core": "^8.0.0"
   },
   "devDependencies": {
-    "@capacitor/cli": "^6.1.0",
+    "@capacitor/cli": "^8.0.0",
     "@capacitor/assets": "^3.0.5"
   }
 }
