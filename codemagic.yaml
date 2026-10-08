@@ -26,8 +26,8 @@ workflows:
     environment:
       android_signing:
         - keystore_reference
-      java: 17
-      node: 20
+      java: 21
+      node: 22
     scripts:
       - name: Install dependencies
         script: |
